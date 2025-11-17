@@ -1,0 +1,45 @@
+##############################
+# Python cache & bytecode
+##############################
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+##############################
+# Virtual environments
+##############################
+venv/
+env/
+.venv/
+
+##############################
+# pytest cache
+##############################
+.pytest_cache/
+.cache/
+
+##############################
+# Editors / IDEs
+##############################
+# VSCode
+.vscode/
+
+# PyCharm
+.idea/
+
+##############################
+# OS-specific
+##############################
+# macOS
+.DS_Store
+
+# Linux
+*~
+
+# Windows
+Thumbs.db
+desktop.ini
+
+assignment_1/files/products.csv
+assignment_1/files/users.json

@@ -1,9 +1,6 @@
-from online_shopping_cart.user.user_authentication import UserAuthenticator
-from online_shopping_cart.user.user_interface import UserInterface
-from online_shopping_cart.user.user_data import UserDataManager
-from samba.dcerpc.samr import Password
-
-from assignment_1.online_shopping_cart.user.user_authentication import PasswordValidator
+from .user_authentication import UserAuthenticator, PasswordValidator
+from .user_interface import UserInterface
+from .user_data import UserDataManager
 
 
 ########################
@@ -29,6 +26,7 @@ def login() -> dict[str, str | float] | None:
         password=password,
         data=UserDataManager.load_users()
     )
+
     if is_authentic_user is not None:
         return is_authentic_user
 
@@ -38,13 +36,10 @@ def login() -> dict[str, str | float] | None:
         return None
 
     new_password: str = UserInterface.get_user_input(prompt="Password: ")
+
     if PasswordValidator.is_valid(new_password):
-        UserAuthenticator.register(username=username, password=new_password, data=0.0)
+        UserAuthenticator.register(username=username, password=new_password, data=UserDataManager.load_users())
         print('Saved new user')
     else:
         print('Invalid password, please give a password with a minimum length of 8 characters, at lease one capital letter and one special symbol')
-
-
-
-
     return None

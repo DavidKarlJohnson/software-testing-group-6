@@ -67,6 +67,5 @@ class UserAuthenticator:
     @staticmethod
     def register(username, password, data) -> None:
         # TODO: Task 1: register username and password as new user to file with 0.0 wallet funds
-        old_users = UserDataManager.load_users()
-        old_users.append({'username': username, 'password': password, 'wallet': data})
-        UserDataManager.save_users(old_users)
+        data.append({'username': username, 'password': password, 'wallet': 0.0})
+        UserDataManager.save_users(data)
