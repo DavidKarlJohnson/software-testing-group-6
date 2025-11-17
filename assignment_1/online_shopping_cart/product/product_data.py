@@ -1,4 +1,4 @@
-from online_shopping_cart.product.product import Product
+from assignment_1.online_shopping_cart.product.product import Product
 from csv import DictReader, reader
 
 ##########################

@@ -1,6 +1,6 @@
-from .user_authentication import UserAuthenticator, PasswordValidator
-from .user_interface import UserInterface
-from .user_data import UserDataManager
+from assignment_1.online_shopping_cart.user.user_authentication import UserAuthenticator, PasswordValidator
+from assignment_1.online_shopping_cart.user.user_interface import UserInterface
+from assignment_1.online_shopping_cart.user.user_data import UserDataManager
 
 
 ########################

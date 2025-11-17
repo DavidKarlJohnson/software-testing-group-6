@@ -1,4 +1,4 @@
-from online_shopping_cart.user.user_interface import UserInterface
+from .user_interface import UserInterface
 
 #########################
 # USER LOGOUT FUNCTIONS #

@@ -1,7 +1,7 @@
-from online_shopping_cart.product.product_search import display_csv_as_table, display_filtered_table
-from online_shopping_cart.checkout.checkout_process import checkout_and_payment
-from online_shopping_cart.user.user_interface import UserInterface
-from online_shopping_cart.user.user_login import login
+from assignment_1.online_shopping_cart.product.product_search import display_csv_as_table, display_filtered_table
+from assignment_1.online_shopping_cart.checkout.checkout_process import checkout_and_payment
+from assignment_1.online_shopping_cart.user.user_interface import UserInterface
+from assignment_1.online_shopping_cart.user.user_login import login
 
 ######################################
 # SHOP SEARCH AND PURCHASE FUNCTIONS #

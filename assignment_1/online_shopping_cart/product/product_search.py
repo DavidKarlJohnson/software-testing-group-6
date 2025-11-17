@@ -1,4 +1,4 @@
-from online_shopping_cart.product.product_data import get_csv_data, PRODUCTS_FILE_PATHNAME
+from assignment_1.online_shopping_cart.product.product_data import get_csv_data, PRODUCTS_FILE_PATHNAME
 from re import search, IGNORECASE
 
 ############################

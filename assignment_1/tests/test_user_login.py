@@ -5,6 +5,12 @@ import os
 from pytest_mock import mocker
 from assignment_1.online_shopping_cart.user.user_login import login
 
+
+
+# ----- TASK 3.1 -----
+# TODO: Write 10 test cases for the function 'login' located in  /online_shopping_cart/user/user_login.py
+
+
 # Fixture for temporary JSON file to be used in tests
 @pytest.fixture
 def temp_json():
@@ -65,3 +71,44 @@ def test_register_save_new_user(mocker, temp_json):
 
     login()
     assert json_to_list(temp_json)[-1] == {'username': username, 'password': password, 'wallet': 0.0}
+
+
+def test_user_login3():
+    # NOTE: Rename function to something appropriate
+    pass
+
+
+def test_user_login4():
+    # NOTE: Rename function to something appropriate
+    pass
+
+
+def test_user_login5():
+    # NOTE: Rename function to something appropriate
+    pass
+
+
+def test_user_login6():
+    # NOTE: Rename function to something appropriate
+    pass
+
+
+def test_user_login7():
+    # NOTE: Rename function to something appropriate
+    pass
+
+
+
+def test_user_login8():
+    # NOTE: Rename function to something appropriate
+    pass
+
+
+def test_user_login9():
+    # NOTE: Rename function to something appropriate
+    pass
+
+
+def test_user_login10():
+    # NOTE: Rename function to something appropriate
+    pass
