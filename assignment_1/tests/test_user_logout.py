@@ -25,6 +25,7 @@ def test_logout4():
     # NOTE: Rename function to something appropriate
     pass
 
+
 def test_logout5():
     # NOTE: Rename function to something appropriate
     pass
