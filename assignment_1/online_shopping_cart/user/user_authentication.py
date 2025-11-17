@@ -32,6 +32,7 @@ class PasswordValidator:
 
     @staticmethod
     def is_valid(password) -> bool:
+        # TODO: Task 1: validate password for registration
         if (PasswordValidator.__has_capital_letter(password) and
             PasswordValidator.__has_special_symbol(password) and
             PasswordValidator.__is_minimum_length(password, 8)):
@@ -65,6 +66,7 @@ class UserAuthenticator:
 
     @staticmethod
     def register(username, password, data) -> None:
+        # TODO: Task 1: register username and password as new user to file with 0.0 wallet funds
         old_users = UserDataManager.load_users()
         old_users.append({'username': username, 'password': password, 'wallet': data})
         UserDataManager.save_users(old_users)
