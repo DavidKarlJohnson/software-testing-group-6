@@ -248,5 +248,10 @@
     "username": "R055A",
     "password": "P@55w0rd",
     "wallet": 10000000000.0
+  },
+  {
+    "username": "Sam",
+    "password": "Serioussam123!",
+    "wallet": 0.0
   }
 ]

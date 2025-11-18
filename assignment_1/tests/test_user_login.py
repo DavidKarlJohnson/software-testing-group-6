@@ -56,10 +56,10 @@ def test_successful_login(mocker, temp_json):
     assert result is not None
 
 
-# Test 2: Register a new user and see if it's stored in the JSON file.
-def test_register_save_new_user(mocker, temp_json):
+# Test 2: Register a new user with valid password and see if it's stored in the JSON file.
+def test_register_save_new_user(mocker, capsys, temp_json):
     username = 'Jimmy'
-    password = 'MynameisJimmy123!'
+    password = 'Password123!'
 
     mocker.patch(
         "assignment_1.online_shopping_cart.user.user_login.UserInterface.get_user_input",
@@ -79,6 +79,7 @@ def test_decline_register_new_user(mocker, temp_json):
         "assignment_1.online_shopping_cart.user.user_login.UserInterface.get_user_input",
         side_effect=['Monkey', 'password123', 'n'])
 
+
     mocker.patch(
         "assignment_1.online_shopping_cart.user.user_data.UserDataManager.USER_FILE_PATHNAME",
         temp_json)
@@ -87,10 +88,19 @@ def test_decline_register_new_user(mocker, temp_json):
     assert result is None
 
 
+# Test 4: Register new user with invalid password - no special character
+def test_register_user_invalid_pw_no_special_char(mocker, temp_json, capsys):
+    mocker.patch(
+        "assignment_1.online_shopping_cart.user.user_login.UserInterface.get_user_input",
+        side_effect=['Jake', 'password123', 'y', 'Password123'])
 
-def test_user_login4():
-    # NOTE: Rename function to something appropriate
-    pass
+    mocker.patch(
+        "assignment_1.online_shopping_cart.user.user_data.UserDataManager.USER_FILE_PATHNAME",
+        temp_json)
+
+    login()
+    captured_output = capsys.readouterr().out
+    assert captured_output == 'User is not registered.\n''Invalid password, please give a password with a minimum length of 8 characters, at lease one capital letter and one special symbol\n'
 
 
 def test_user_login5():
