@@ -42,7 +42,7 @@ def json_to_list(file):
         return json.load(f)
 
 
-# Log in an existing user
+# Test 1: Log in an existing user
 def test_successful_login(mocker, temp_json):
     mocker.patch(
         "assignment_1.online_shopping_cart.user.user_login.UserInterface.get_user_input",
@@ -56,7 +56,7 @@ def test_successful_login(mocker, temp_json):
     assert result is not None
 
 
-# Register a new user and see if it's stored in the JSON file.
+# Test 2: Register a new user and see if it's stored in the JSON file.
 def test_register_save_new_user(mocker, temp_json):
     username = 'Jimmy'
     password = 'MynameisJimmy123!'
@@ -73,9 +73,19 @@ def test_register_save_new_user(mocker, temp_json):
     assert json_to_list(temp_json)[-1] == {'username': username, 'password': password, 'wallet': 0.0}
 
 
-def test_user_login3():
-    # NOTE: Rename function to something appropriate
-    pass
+# Test 3: The user declines the prompt to register a new user
+def test_decline_register_new_user(mocker, temp_json):
+    mocker.patch(
+        "assignment_1.online_shopping_cart.user.user_login.UserInterface.get_user_input",
+        side_effect=['Monkey', 'password123', 'n'])
+
+    mocker.patch(
+        "assignment_1.online_shopping_cart.user.user_data.UserDataManager.USER_FILE_PATHNAME",
+        temp_json)
+
+    result = login()
+    assert result is None
+
 
 
 def test_user_login4():

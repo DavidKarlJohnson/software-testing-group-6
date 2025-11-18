@@ -2,7 +2,7 @@
 # USER AUTHENTICATION CLASSES #
 ###############################
 
-from rich.console import Console
+#from rich.console import Console
 
 from assignment_1.online_shopping_cart.user.user_data import UserDataManager
 
