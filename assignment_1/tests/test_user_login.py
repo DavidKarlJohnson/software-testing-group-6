@@ -133,9 +133,19 @@ def test_register_user_invalid_pw_no_capital(mocker, temp_json, capsys):
     assert captured_output == 'User is not registered.\n''Invalid password, please give a password with a minimum length of 8 characters, at lease one capital letter and one special symbol\n'
 
 
-def test_user_login7():
-    # NOTE: Rename function to something appropriate
-    pass
+# Test 7: Register new user with invalid password - only blank space
+def test_register_user_invalid_pw_blank_space(mocker, temp_json, capsys):
+    mocker.patch(
+        "assignment_1.online_shopping_cart.user.user_login.UserInterface.get_user_input",
+        side_effect=['Jake', 'password123', 'y', ' '])
+
+    mocker.patch(
+        "assignment_1.online_shopping_cart.user.user_data.UserDataManager.USER_FILE_PATHNAME",
+        temp_json)
+
+    login()
+    captured_output = capsys.readouterr().out
+    assert captured_output == 'User is not registered.\n''Invalid password, please give a password with a minimum length of 8 characters, at lease one capital letter and one special symbol\n'
 
 
 
