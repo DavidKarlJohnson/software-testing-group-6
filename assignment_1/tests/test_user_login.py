@@ -56,10 +56,11 @@ def test_successful_login(mocker, temp_json):
     assert result is not None
 
 
-# Test 2: Register a new user with valid password and see if it's stored in the JSON file.
+# Test 2: Register a new user with valid password at exactly minimum length
+#         and see if it's stored in the JSON file.
 def test_register_save_new_user(mocker, capsys, temp_json):
     username = 'Jimmy'
-    password = 'Password123!'
+    password = 'Pass!234'
 
     mocker.patch(
         "assignment_1.online_shopping_cart.user.user_login.UserInterface.get_user_input",
@@ -149,7 +150,7 @@ def test_register_user_invalid_pw_blank_space(mocker, temp_json, capsys):
 
 
 
-# Test 7: Register new user with invalid password - no characters
+# Test 8: Register new user with invalid password - no characters
 def test_register_user_invalid_pw_no_char(mocker, temp_json, capsys):
     mocker.patch(
         "assignment_1.online_shopping_cart.user.user_login.UserInterface.get_user_input",

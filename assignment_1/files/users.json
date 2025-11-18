@@ -253,5 +253,10 @@
     "username": "Sam",
     "password": "Serioussam123!",
     "wallet": 0.0
+  },
+  {
+    "username": "Samantha",
+    "password": "Apa1234!fef",
+    "wallet": 0.0
   }
 ]
