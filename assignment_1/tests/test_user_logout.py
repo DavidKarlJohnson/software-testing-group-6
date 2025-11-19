@@ -1,4 +1,6 @@
 import pytest
+
+from assignment_1.online_shopping_cart.checkout.shopping_cart import ShoppingCart
 from assignment_1.online_shopping_cart.user.user_logout import logout
 
 
@@ -6,9 +8,22 @@ from assignment_1.online_shopping_cart.user.user_logout import logout
 # ----- TASK 3.1 -----
 # TODO: Write 10 test cases for the function 'logout' located in  /online_shopping_cart/user/user_logout.py
 
-def test_logout1():
-    # NOTE: Rename function to something appropriate
-    pass
+
+# Test #1: Test different variants of 'yes' for confirming logout
+@pytest.mark.parametrize('user_input, expected',
+                         [('y', True),
+                          ('yes', True),
+                          ('yeah', True),
+                          ('yyyyyy', True),
+                          ('no', False)])
+def test_logout_yes(mocker, user_input, expected):
+    cart: ShoppingCart = ShoppingCart()
+    mocker.patch(
+        "assignment_1.online_shopping_cart.user.user_logout.UserInterface.get_user_input",
+        side_effect=[user_input])
+
+    result = logout(cart)
+    assert result == expected
 
 
 def test_logout2():
