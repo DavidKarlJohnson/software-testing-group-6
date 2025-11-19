@@ -42,12 +42,22 @@ def test_logout_confirmation_no(mocker, user_input, expected):
 
     result = logout(cart)
     assert result == expected
-    pass
 
 
-def test_logout3():
-    # NOTE: Rename function to something appropriate
-    pass
+# Test #3: Test capitalization of confirmation to logout
+@pytest.mark.parametrize('user_input, expected',
+                         [('Y', True),
+                          ('Yes', True),
+                          ('N', False),
+                          ('No', False)])
+def test_logout_confirmation_capitalization(mocker, user_input, expected):
+    cart: ShoppingCart = ShoppingCart()
+    mocker.patch(
+        "assignment_1.online_shopping_cart.user.user_logout.UserInterface.get_user_input",
+        side_effect=[user_input])
+
+    result = logout(cart)
+    assert result == expected
 
 
 def test_logout4():
