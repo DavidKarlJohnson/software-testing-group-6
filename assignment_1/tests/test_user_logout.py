@@ -1,6 +1,8 @@
 import pytest
+import os
 
 from assignment_1.online_shopping_cart.checkout.shopping_cart import ShoppingCart
+from assignment_1.online_shopping_cart.product.product import Product
 from assignment_1.online_shopping_cart.user.user_logout import logout
 
 
@@ -17,12 +19,12 @@ from assignment_1.online_shopping_cart.user.user_logout import logout
                           ('yyyyyy', True),
                           ('no', False)])
 def test_logout_confirmation_yes(mocker, user_input, expected):
-    cart: ShoppingCart = ShoppingCart()
+    shopping_cart = ShoppingCart()
     mocker.patch(
         "assignment_1.online_shopping_cart.user.user_logout.UserInterface.get_user_input",
         side_effect=[user_input])
 
-    result = logout(cart)
+    result = logout(shopping_cart)
     assert result == expected
 
 
@@ -35,12 +37,12 @@ def test_logout_confirmation_yes(mocker, user_input, expected):
                           (' ', False),
                           ('y', True)])
 def test_logout_confirmation_no(mocker, user_input, expected):
-    cart: ShoppingCart = ShoppingCart()
+    shopping_cart = ShoppingCart()
     mocker.patch(
         "assignment_1.online_shopping_cart.user.user_logout.UserInterface.get_user_input",
         side_effect=[user_input])
 
-    result = logout(cart)
+    result = logout(shopping_cart)
     assert result == expected
 
 
@@ -51,18 +53,29 @@ def test_logout_confirmation_no(mocker, user_input, expected):
                           ('N', False),
                           ('No', False)])
 def test_logout_confirmation_capitalization(mocker, user_input, expected):
-    cart: ShoppingCart = ShoppingCart()
+    shopping_cart = ShoppingCart()
     mocker.patch(
         "assignment_1.online_shopping_cart.user.user_logout.UserInterface.get_user_input",
         side_effect=[user_input])
 
-    result = logout(cart)
+    result = logout(shopping_cart)
     assert result == expected
 
 
-def test_logout4():
-    # NOTE: Rename function to something appropriate
-    pass
+# Test #4: Non-empty cart warning when logging out
+def test_logout_with_non_empty_cart(mocker, capsys):
+    shopping_cart = ShoppingCart()
+    shopping_cart.add_item(Product(name='Carrot', price=10.0, units=1))
+    shopping_cart.add_item(Product(name='Egg', price=20.0, units=2))
+    shopping_cart.add_item(Product(name='Shoe', price=30.0, units=2))
+
+    mocker.patch(
+        "assignment_1.online_shopping_cart.user.user_logout.UserInterface.get_user_input",
+        side_effect='n')
+
+    logout(shopping_cart)
+    captured_output = capsys.readouterr().out
+    assert captured_output == 'Your cart is not empty. You have the following items:\n''Carrot - $10.0 - Units: 1\n''Egg - $20.0 - Units: 2\n''Shoe - $30.0 - Units: 2\n'
 
 
 def test_logout5():
