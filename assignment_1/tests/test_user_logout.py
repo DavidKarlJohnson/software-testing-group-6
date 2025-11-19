@@ -16,7 +16,7 @@ from assignment_1.online_shopping_cart.user.user_logout import logout
                           ('yeah', True),
                           ('yyyyyy', True),
                           ('no', False)])
-def test_logout_yes(mocker, user_input, expected):
+def test_logout_confirmation_yes(mocker, user_input, expected):
     cart: ShoppingCart = ShoppingCart()
     mocker.patch(
         "assignment_1.online_shopping_cart.user.user_logout.UserInterface.get_user_input",
@@ -26,8 +26,22 @@ def test_logout_yes(mocker, user_input, expected):
     assert result == expected
 
 
-def test_logout2():
-    # NOTE: Rename function to something appropriate
+# Test #2: Test different variants of 'no' for canceling logout
+@pytest.mark.parametrize('user_input, expected',
+                         [('n', False),
+                          ('no', False),
+                          ('abc', False),
+                          ('!', False),
+                          (' ', False),
+                          ('y', True)])
+def test_logout_confirmation_no(mocker, user_input, expected):
+    cart: ShoppingCart = ShoppingCart()
+    mocker.patch(
+        "assignment_1.online_shopping_cart.user.user_logout.UserInterface.get_user_input",
+        side_effect=[user_input])
+
+    result = logout(cart)
+    assert result == expected
     pass
 
 
