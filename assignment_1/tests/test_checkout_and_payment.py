@@ -186,6 +186,9 @@ def test_checkout_and_payment14():
     pass
 
 
-def test_checkout_and_payment15():
-    # NOTE: Rename function to something appropriate
-    pass
+# Test 15: Lout with an empty cart
+def test_logout_empty_cart(mocker, capsys):
+    mocker.patch("assignment_1.online_shopping_cart.user.user_login.UserInterface.get_user_input", side_effect=['l', 'y'])
+    setup = setup_reimport_initialize(mocker, mock_global_products())
+    assert setup.global_cart.is_empty()
+    assert capsys.readouterr().out == 'You have been logged out.\n'
