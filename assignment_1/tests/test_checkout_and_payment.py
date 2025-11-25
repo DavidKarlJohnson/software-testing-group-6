@@ -77,23 +77,23 @@ def setup_reimport_initialize(mocker, temp_products=None, temp_json=None):
     ('user_input', 'expected_output'),
      [
         # Test 1: Add the first product (1) within the acceptable bounds [1,5]
-         (['1', 'l', 'y'],
-          'Apple added to your cart.\n'
-          'Your cart is not empty. You have the following items:\n'
-          'Apple - $2.0 - Units: 1\n''You have been logged out.\n'),
+        (['1', 'l', 'y'],
+         'Apple added to your cart.\n'
+         'Your cart is not empty. You have the following items:\n'
+         'Apple - $2.0 - Units: 1\n''You have been logged out.\n'),
         # Test 2: Add the last product (5) within the acceptable bounds [1,5]
-         (['5', 'l', 'y'],
-          'Strawberry added to your cart.\n'
-          'Your cart is not empty. You have the following items:\n'
-          'Strawberry - $4.0 - Units: 1\n''You have been logged out.\n'),
+        (['5', 'l', 'y'],
+         'Strawberry added to your cart.\n'
+         'Your cart is not empty. You have the following items:\n'
+         'Strawberry - $4.0 - Units: 1\n''You have been logged out.\n'),
         # Test 3: Add a product (6) that's out of bounds [1,5]
-         (['6', 'l', 'y'],
-          'Invalid input. Please try again.\n'
-          'You have been logged out.\n'),
+        (['6', 'l', 'y'],
+         'Invalid input. Please try again.\n'
+         'You have been logged out.\n'),
         # Test 4: Add a product (0) that's out of bounds [1,5]
-         (['0', 'l', 'y'],
-          'Invalid input. Please try again.\n'
-          'You have been logged out.\n'),
+        (['0', 'l', 'y'],
+         'Invalid input. Please try again.\n'
+         'You have been logged out.\n'),
      ],
      ids=['Products is within bounds, lower',
           'Products is within bounds, upper',
@@ -149,25 +149,38 @@ def test_add_product_no_stock(mocker, capsys):
                                       '\nYou have been logged out.\n')
 
 
-# Test 9: Remove an item from the cart
-def test_remove_valid_product_from_cart():
-    # PSEUDO CODE:
-    # USER NAVIGATION:  *Add items to cart* > "C" > Do you want to checkout? > "N" > Do you want to remove and item > "Y" > *Enters number out of bounds* > Invalid input. Please try again > Do you want to checkout Y/N?
-    pass
+# Test 9: Remove an item from the cart (valid removal)
+def test_remove_valid_product_from_cart(mocker, capsys):
+    side = ['1', 'c', 'n', 'y', '1', 'n', 'n', 'l', 'y']
+
+    mocker.patch("assignment_1.online_shopping_cart.user.user_login.UserInterface.get_user_input", side_effect=side)
+    setup = setup_reimport_initialize(mocker, mock_global_products())
+    assert setup.global_products[0].units == 10
+    assert setup.global_cart.is_empty()
 
 
-# Test 10: Remove an item that's not in the cart (out of bounds)
-def test_remove_invalid_product_from_cart():
-    # PSEUDO CODE:
-    # USER NAVIGATION:  *Add items to cart* > "C" > Do you want to checkout? > "N" > Do you want to remove and item > "Y" > *Enters number within bounds* > ***Check in test that items are removed from cart***
-    pass
+# Test 10: Remove an item that's not in the cart (invalid/out-of-bounds removal)
+def test_remove_invalid_product_from_cart(mocker, capsys):
+    side = ['1', 'c', 'n', 'y', '10', 'n', 'n', 'l', 'y']
+
+    mocker.patch("assignment_1.online_shopping_cart.user.user_login.UserInterface.get_user_input", side_effect=side)
+    setup_reimport_initialize(mocker, mock_global_products())
+    out = capsys.readouterr().out
+    assert 'Invalid input. Please try again.' in out
 
 
-# Test 11: Checkout and see if cart is cleared
-def test_checkout_clear_cart():
-    # PSEUDO CODE:
-    # USER NAVIGATION:  *Items already in cart* > Do you want to checkout? > "Y" > *System prints thank you* > *Check in test if item is checked out*
-    pass
+# Test 11: Checkout and see if cart is cleared and user's wallet updated in users.json
+def test_checkout_clear_cart(mocker, temp_json):
+    mocker.patch("assignment_1.online_shopping_cart.user.user_login.UserInterface.get_user_input", side_effect=['1', 'c', 'y', 'l', 'y'])
+    setup = setup_reimport_initialize(mocker, mock_global_products(), temp_json)
+
+    assert setup.global_cart.is_empty()
+
+    with open(temp_json, 'r') as f:
+        users = json.load(f)
+    found = next((u for u in users if u['username'] == 'Maximus'), None)
+    assert found is not None
+    assert found['wallet'] == pytest.approx(998.0)
 
 
 # Test 12: Logout with a cart that's not empty
