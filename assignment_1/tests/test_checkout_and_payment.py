@@ -46,6 +46,28 @@ def mock_global_products():
             Product(name='Strawberry', price=4.0, units=12)]
 
 
+# Helper function for setting up the testing environment for 'checkout_and_payment'.
+# Function will: (1) Patch 'products.csv' and 'users.json' files,
+#                (2) Re-import 'checkout_process' module to refresh global variables
+#                (3) Create global ShoppingCart object
+#                (4) Call 'checkout_and_payment' with a pre-defined user
+def setup_reimport_initialize(mocker, temp_products=None, temp_json=None):
+    login_info = {'username': 'Maximus', 'wallet': 1000.0}
+    mocker.patch('builtins.exit', side_effect=SystemExit)
+    if temp_products is not None:
+        mocker.patch('assignment_1.online_shopping_cart.product.product_data.get_products', return_value=temp_products)
+    if temp_json is not None:
+        mocker.patch("assignment_1.online_shopping_cart.user.user_data.UserDataManager.USER_FILE_PATHNAME", temp_json)
+
+    # NOTE: Global variable 'global_products' is set at module import of this test file.
+    #       The import below is to update this variable to the patch set within this test.
+    from assignment_1.online_shopping_cart.checkout import checkout_process
+    checkout_process.global_cart = ShoppingCart()
+    with pytest.raises(SystemExit):
+        checkout_process.checkout_and_payment(login_info)
+
+    return checkout_process
+
 
 @pytest.mark.parametrize(
     ('user_input', 'expected_output'),
@@ -75,37 +97,16 @@ def mock_global_products():
           'Products is out of bounds, lower',]
 )
 def test_add_product_boundaries(user_input, expected_output, mocker, capsys):
-    login_info = {'username': 'Maximus', 'wallet': 1000.0}
-    mocker.patch('assignment_1.online_shopping_cart.product.product_data.get_products', return_value=mock_global_products())
     mocker.patch("assignment_1.online_shopping_cart.user.user_login.UserInterface.get_user_input", side_effect=user_input)
-    mocker.patch('builtins.exit', side_effect=SystemExit)
-
-    # NOTE: Global variable 'global_products' is set at module import of this test file.
-    #       The import below is to update this variable to the patch set within this test.
-    from assignment_1.online_shopping_cart.checkout import checkout_process
-    checkout_process.global_cart = ShoppingCart()
-    with pytest.raises(SystemExit):
-        checkout_process.checkout_and_payment(login_info)
-
+    setup_reimport_initialize(mocker, mock_global_products())
     assert capsys.readouterr().out == expected_output
 
 
-# Test 5: Add a product to the shopping cart, check out and see if its inventory is reduced
+# Test 5: Add a product to the shopping cart, checkout and see if its inventory is reduced
 def test_checkout_reduce_product(mocker, capsys, temp_json):
-    login_info = {'username': 'Maximus', 'wallet': 1000.0}
-    mocker.patch('assignment_1.online_shopping_cart.product.product_data.get_products', return_value=mock_global_products())
-    mocker.patch("assignment_1.online_shopping_cart.user.user_data.UserDataManager.USER_FILE_PATHNAME", temp_json)
     mocker.patch("assignment_1.online_shopping_cart.user.user_login.UserInterface.get_user_input", side_effect=['4', 'c', 'y', 'l', 'y'])
-    mocker.patch('builtins.exit', side_effect=SystemExit)
-
-    # NOTE: Global variable 'global_products' is set at module import of this test file.
-    #       The import below is to update this variable to the patch set within this test.
-    from assignment_1.online_shopping_cart.checkout import checkout_process
-    checkout_process.global_cart = ShoppingCart()
-    with pytest.raises(SystemExit):
-        checkout_process.checkout_and_payment(login_info)
-
-    assert checkout_process.global_products[3].units == 0
+    setup = setup_reimport_initialize(mocker, mock_global_products())
+    assert setup.global_products[3].units == 0
 
 
 def test_checkout_and_payment6():
