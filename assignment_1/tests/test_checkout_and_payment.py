@@ -114,7 +114,7 @@ def test_checkout_reduce_product(mocker, temp_json):
 
 
 # Test 6: Print out all the available products for purchase
-def test_checkout_and_payment6(mocker, capsys):
+def test_print_stock(mocker, capsys):
     mocker.patch("assignment_1.online_shopping_cart.user.user_login.UserInterface.get_user_input",
                  side_effect=['d', 'l', 'y'])
     setup_reimport_initialize(mocker, mock_global_products())
@@ -128,7 +128,7 @@ def test_checkout_and_payment6(mocker, capsys):
 
 
 # Test 7: User navigates to checkout with an empty cart
-def test_checkout_and_payment7(mocker, capsys):
+def test_checkout_empty_cart(mocker, capsys):
     mocker.patch("assignment_1.online_shopping_cart.user.user_login.UserInterface.get_user_input",
                  side_effect=['c', 'l', 'y'])
     setup_reimport_initialize(mocker, mock_global_products())
@@ -137,7 +137,7 @@ def test_checkout_and_payment7(mocker, capsys):
 
 
 # Test 8: Add to cart a product that's not in stock
-def test_checkout_and_payment8(mocker, capsys):
+def test_add_product_no_stock(mocker, capsys):
     mocker.patch("assignment_1.online_shopping_cart.user.user_login.UserInterface.get_user_input",
                  side_effect=['1', 'l', 'y'])
     setup_reimport_initialize(mocker, [Product(name='Kex', price=2.0, units=0),
@@ -149,22 +149,29 @@ def test_checkout_and_payment8(mocker, capsys):
                                       '\nYou have been logged out.\n')
 
 
-def test_checkout_and_payment9():
-    # NOTE: Rename function to something appropriate
+# Test 9: Remove an item from the cart
+def test_remove_valid_product_from_cart():
+    # PSEUDO CODE:
+    # USER NAVIGATION:  *Add items to cart* > "C" > Do you want to checkout? > "N" > Do you want to remove and item > "Y" > *Enters number out of bounds* > Invalid input. Please try again > Do you want to checkout Y/N?
     pass
 
 
-def test_checkout_and_payment10():
-    # NOTE: Rename function to something appropriate
+# Test 10: Remove an item that's not in the cart (out of bounds)
+def test_remove_invalid_product_from_cart():
+    # PSEUDO CODE:
+    # USER NAVIGATION:  *Add items to cart* > "C" > Do you want to checkout? > "N" > Do you want to remove and item > "Y" > *Enters number within bounds* > ***Check in test that items are removed from cart***
     pass
 
 
-def test_checkout_and_payment11():
-    # NOTE: Rename function to something appropriate
+# Test 11: Checkout and see if cart is cleared
+def test_checkout_clear_cart():
+    # PSEUDO CODE:
+    # USER NAVIGATION:  *Items already in cart* > Do you want to checkout? > "Y" > *System prints thank you* > *Check in test if item is checked out*
     pass
 
 
-def test_checkout_and_payment12():
+# Test 12: Logout with a cart that's not empty
+def test_logout_non_empty_cart():
     # NOTE: Rename function to something appropriate
     pass
 
