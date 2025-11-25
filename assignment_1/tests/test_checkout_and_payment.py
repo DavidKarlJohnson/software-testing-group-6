@@ -181,12 +181,15 @@ def test_checkout_and_payment13():
     pass
 
 
-def test_checkout_and_payment14():
-    # NOTE: Rename function to something appropriate
-    pass
+# Test 14: Try to add a product to cart using decimal input
+def test_invalid_product_decimal(mocker, capsys):
+    mocker.patch("assignment_1.online_shopping_cart.user.user_login.UserInterface.get_user_input", side_effect=['1.5', 'l', 'y'])
+    setup = setup_reimport_initialize(mocker, mock_global_products())
+    assert setup.global_cart.is_empty()
+    assert capsys.readouterr().out == 'Invalid input. Please try again.\nYou have been logged out.\n'
 
 
-# Test 15: Lout with an empty cart
+# Test 15: Logout with an empty cart
 def test_logout_empty_cart(mocker, capsys):
     mocker.patch("assignment_1.online_shopping_cart.user.user_login.UserInterface.get_user_input", side_effect=['l', 'y'])
     setup = setup_reimport_initialize(mocker, mock_global_products())
