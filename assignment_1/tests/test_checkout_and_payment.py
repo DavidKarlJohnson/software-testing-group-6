@@ -172,9 +172,14 @@ def test_checkout_clear_cart():
 
 
 # Test 12: Logout with a cart that's not empty
-def test_logout_non_empty_cart():
-    # NOTE: Rename function to something appropriate
-    pass
+def test_logout_non_empty_cart(mocker, capsys):
+    mocker.patch("assignment_1.online_shopping_cart.user.user_login.UserInterface.get_user_input", side_effect=['1', 'l', 'y'])
+    setup = setup_reimport_initialize(mocker, mock_global_products())
+    assert setup.global_cart.is_empty() == False
+    assert capsys.readouterr().out == ('Apple added to your cart.\n'
+                                         'Your cart is not empty. You have the following items:\n'
+                                         'Apple - $2.0 - Units: 1\n'
+                                         'You have been logged out.\n')
 
 
 # Test 13: Check to see it checking out a product changes the 'display products' message
