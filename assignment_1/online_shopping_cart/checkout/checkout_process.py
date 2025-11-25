@@ -1,5 +1,6 @@
 from assignment_1.online_shopping_cart.checkout.shopping_cart import ShoppingCart
-from assignment_1.online_shopping_cart.product.product_data import get_products
+from assignment_1.online_shopping_cart.product import product_data
+from assignment_1.online_shopping_cart.user.user_data import UserDataManager
 from assignment_1.online_shopping_cart.user.user_interface import UserInterface
 from assignment_1.online_shopping_cart.product.product import Product
 from assignment_1.online_shopping_cart.user.user_logout import logout
@@ -10,7 +11,7 @@ from assignment_1.online_shopping_cart.user.user import User
 ############################
 
 
-global_products: list[Product] = get_products()  # Load products from CSV
+global_products: list[Product] = product_data.get_products()
 global_cart: ShoppingCart = ShoppingCart()
 
 
@@ -95,6 +96,8 @@ def checkout_and_payment(login_info) -> None:
     """
     global global_products, global_cart
 
+    global_products = product_data.get_products()
+
     user: User = User(
         name=login_info['username'],
         wallet=login_info['wallet']
@@ -111,7 +114,12 @@ def checkout_and_payment(login_info) -> None:
             if check_cart(user=user, cart=global_cart) is False:
                 continue  # The user has selected not to check out their cart
             else:
-                pass  # TODO: Task 4: update the wallet information in the users.json file
+                # TODO: Task 4: update the wallet information in the users.json file
+                users = UserDataManager.load_users()
+                for i in users:
+                    if i['username'] == user.name:
+                        i['wallet'] = user.wallet
+                UserDataManager.save_users(users)
         elif choice.startswith('l'):
             if logout(cart=global_cart):
                 exit(0)  # The user has logged out
