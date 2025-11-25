@@ -140,7 +140,8 @@ def test_checkout_empty_cart(mocker, capsys):
 def test_add_product_no_stock(mocker, capsys):
     mocker.patch("assignment_1.online_shopping_cart.user.user_login.UserInterface.get_user_input",
                  side_effect=['1', 'l', 'y'])
-    setup_reimport_initialize(mocker, [Product(name='Kex', price=2.0, units=0),
+    setup_reimport_initialize(mocker,
+[Product(name='Kex', price=2.0, units=0),
             Product(name='Banana', price=1.0, units=15),
             Product(name='Orange', price=1.5, units=8),
             Product(name='Grapes', price=3.0, units=1),
@@ -176,9 +177,24 @@ def test_logout_non_empty_cart():
     pass
 
 
-def test_checkout_and_payment13():
-    # NOTE: Rename function to something appropriate
-    pass
+# Test 13: Check to see it checking out a product changes the 'display products' message
+def test_display_products_after_checkout(mocker, capsys, temp_json):
+    mocker.patch("assignment_1.online_shopping_cart.user.user_login.UserInterface.get_user_input", side_effect=['d', '1', 'c', 'y', 'd', 'l', 'y'])
+    setup_reimport_initialize(mocker, [Product(name='Kex', price=2.0, units=1), Product(name='Banana', price=1.0, units=15)], temp_json)
+    assert capsys.readouterr().out == ('\n'
+                                        'Available products for purchase:\n'
+                                         '1. Kex - $2.0 - Units: 1\n'
+                                         '2. Banana - $1.0 - Units: 15\n'
+                                         'Kex added to your cart.\n'
+                                         '\n'
+                                         'Items in the cart:\n'
+                                         '1. Kex - $2.0 - Units: 1\n'
+                                         'Thank you for your purchase, Maximus! Your remaining balance is 998.0\n'
+                                         '\n'
+                                         'Available products for purchase:\n'
+                                         '1. Kex - $2.0 - Units: 0\n'
+                                         '2. Banana - $1.0 - Units: 15\n'
+                                         'You have been logged out.\n')
 
 
 # Test 14: Try to add a product to cart using decimal input
