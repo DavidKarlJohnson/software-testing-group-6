@@ -3,6 +3,10 @@ import pytest
 from assignment_1.online_shopping_cart.shop import shop_search_and_purchase as ssp
 
 
+# ----- TASK 3.2 -----
+# Write 10 test cases for the function 'search_and_purchase_product' located in  /online_shopping_cart/shop/shop_search_and_purchase.py
+
+
 def make_input(seq):
     it = iter(seq)
 

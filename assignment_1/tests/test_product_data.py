@@ -3,6 +3,9 @@ from assignment_1.online_shopping_cart.product import product_data
 from assignment_1.online_shopping_cart.product.product import Product
 
 
+# ----- TASK 3.3 -----
+# Write 10 test cases for the function 'get_products' located in  /online_shopping_cart/product/product_data.py
+
 def test_get_products_single_valid(mocker):
     data = [
         {'Product': 'Widget', 'Price': '9.99', 'Units': '5'}
