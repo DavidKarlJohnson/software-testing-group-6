@@ -1,6 +1,8 @@
 import json
 import os
 import tempfile
+from copy import deepcopy
+
 import pytest
 
 from assignment_1.online_shopping_cart.checkout.shopping_cart import ShoppingCart
@@ -55,14 +57,16 @@ def setup_reimport_initialize(mocker, temp_products=None, temp_json=None):
     login_info = {'username': 'Maximus', 'wallet': 1000.0}
     mocker.patch('builtins.exit', side_effect=SystemExit)
     if temp_products is not None:
-        mocker.patch('assignment_1.online_shopping_cart.product.product_data.get_products', return_value=temp_products)
+        mocker.patch('assignment_1.online_shopping_cart.product.product_data.get_products', return_value=deepcopy(temp_products))
     if temp_json is not None:
         mocker.patch("assignment_1.online_shopping_cart.user.user_data.UserDataManager.USER_FILE_PATHNAME", temp_json)
 
     # NOTE: Global variable 'global_products' is set at module import of this test file.
     #       The import below is to update this variable to the patch set within this test.
     from assignment_1.online_shopping_cart.checkout import checkout_process
+    checkout_process.global_products = deepcopy(temp_products)
     checkout_process.global_cart = ShoppingCart()
+
     with pytest.raises(SystemExit):
         checkout_process.checkout_and_payment(login_info)
 
@@ -115,11 +119,11 @@ def test_checkout_and_payment6(mocker, capsys):
                  side_effect=['d', 'l', 'y'])
     setup_reimport_initialize(mocker, mock_global_products())
     assert capsys.readouterr().out ==  ('\nAvailable products for purchase:\n'
-                                        '1. Apple - $2.0 - Units: 9\n'
+                                        '1. Apple - $2.0 - Units: 10\n'
                                         '2. Banana - $1.0 - Units: 15\n'
                                         '3. Orange - $1.5 - Units: 8\n'
-                                        '4. Grapes - $3.0 - Units: 0\n'
-                                        '5. Strawberry - $4.0 - Units: 11\n'
+                                        '4. Grapes - $3.0 - Units: 1\n'
+                                        '5. Strawberry - $4.0 - Units: 12\n'
                                         'You have been logged out.\n')
 
 
@@ -132,9 +136,17 @@ def test_checkout_and_payment7(mocker, capsys):
                                        '\nYou have been logged out.\n')
 
 
-def test_checkout_and_payment8():
-    # NOTE: Rename function to something appropriate
-    pass
+# Test 8: Add to cart a product that's not in stock
+def test_checkout_and_payment8(mocker, capsys):
+    mocker.patch("assignment_1.online_shopping_cart.user.user_login.UserInterface.get_user_input",
+                 side_effect=['1', 'l', 'y'])
+    setup_reimport_initialize(mocker, [Product(name='Kex', price=2.0, units=0),
+            Product(name='Banana', price=1.0, units=15),
+            Product(name='Orange', price=1.5, units=8),
+            Product(name='Grapes', price=3.0, units=1),
+            Product(name='Strawberry', price=4.0, units=12)])
+    assert capsys.readouterr().out == ('Sorry, Kex is out of stock.'
+                                      '\nYou have been logged out.\n')
 
 
 def test_checkout_and_payment9():
