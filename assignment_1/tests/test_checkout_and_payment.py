@@ -46,11 +46,38 @@ def mock_global_products():
             Product(name='Strawberry', price=4.0, units=12)]
 
 
-# Test 1: Add the first product (1) within the acceptable bounds [1,5]
-def test_add_product_within_bounds_lower(mocker, capsys):
+
+@pytest.mark.parametrize(
+    ('user_input', 'expected_output'),
+     [
+        # Test 1: Add the first product (1) within the acceptable bounds [1,5]
+         (['1', 'l', 'y'],
+          'Apple added to your cart.\n'
+          'Your cart is not empty. You have the following items:\n'
+          'Apple - $2.0 - Units: 1\n''You have been logged out.\n'),
+        # Test 2: Add the last product (5) within the acceptable bounds [1,5]
+         (['5', 'l', 'y'],
+          'Strawberry added to your cart.\n'
+          'Your cart is not empty. You have the following items:\n'
+          'Strawberry - $4.0 - Units: 1\n''You have been logged out.\n'),
+        # Test 3: Add a product (6) that's out of bounds [1,5]
+         (['6', 'l', 'y'],
+          'Invalid input. Please try again.\n'
+          'You have been logged out.\n'),
+        # Test 4: Add a product (0) that's out of bounds [1,5]
+         (['0', 'l', 'y'],
+          'Invalid input. Please try again.\n'
+          'You have been logged out.\n'),
+     ],
+     ids=['Products is within bounds, lower',
+          'Products is within bounds, upper',
+          'Products is out of bounds, upper',
+          'Products is out of bounds, lower',]
+)
+def test_add_product_boundaries(user_input, expected_output, mocker, capsys):
     login_info = {'username': 'Maximus', 'wallet': 1000.0}
     mocker.patch('assignment_1.online_shopping_cart.product.product_data.get_products', return_value=mock_global_products())
-    mocker.patch("assignment_1.online_shopping_cart.user.user_login.UserInterface.get_user_input", side_effect=['1', 'l', 'y'])
+    mocker.patch("assignment_1.online_shopping_cart.user.user_login.UserInterface.get_user_input", side_effect=user_input)
     mocker.patch('builtins.exit', side_effect=SystemExit)
 
     # NOTE: Global variable 'global_products' is set at module import of this test file.
@@ -60,58 +87,7 @@ def test_add_product_within_bounds_lower(mocker, capsys):
     with pytest.raises(SystemExit):
         checkout_process.checkout_and_payment(login_info)
 
-    assert capsys.readouterr().out == 'Apple added to your cart.\n''Your cart is not empty. You have the following items:\n''Apple - $2.0 - Units: 1\n''You have been logged out.\n'
-
-
-# Test 2: Add the last product (5) within the acceptable bounds [1,5]
-def test_add_product_within_bounds_upper(mocker, capsys):
-    login_info = {'username': 'Maximus', 'wallet': 1000.0}
-    mocker.patch('assignment_1.online_shopping_cart.product.product_data.get_products', return_value=mock_global_products())
-    mocker.patch("assignment_1.online_shopping_cart.user.user_login.UserInterface.get_user_input", side_effect=['5', 'l', 'y'])
-    mocker.patch('builtins.exit', side_effect=SystemExit)
-
-    # NOTE: Global variable 'global_products' is set at module import of this test file.
-    #       The import below is to update this variable to the patch set within this test.
-    from assignment_1.online_shopping_cart.checkout import checkout_process
-    checkout_process.global_cart = ShoppingCart()
-    with pytest.raises(SystemExit):
-        checkout_process.checkout_and_payment(login_info)
-
-    assert capsys.readouterr().out == 'Strawberry added to your cart.\n''Your cart is not empty. You have the following items:\n''Strawberry - $4.0 - Units: 1\n''You have been logged out.\n'
-
-
-# Test 3: Add a product (6) that's out of bounds [1,5]
-def test_add_product_out_of_bounds_upper(mocker, capsys):
-    login_info = {'username': 'Maximus', 'wallet': 1000.0}
-    mocker.patch('assignment_1.online_shopping_cart.product.product_data.get_products', return_value=mock_global_products())
-    mocker.patch("assignment_1.online_shopping_cart.user.user_login.UserInterface.get_user_input", side_effect=['6', 'l', 'y'])
-    mocker.patch('builtins.exit', side_effect=SystemExit)
-
-    # NOTE: Global variable 'global_products' is set at module import of this test file.
-    #       The import below is to update this variable to the patch set within this test.
-    from assignment_1.online_shopping_cart.checkout import checkout_process
-    checkout_process.global_cart = ShoppingCart()
-    with pytest.raises(SystemExit):
-        checkout_process.checkout_and_payment(login_info)
-
-    assert capsys.readouterr().out == 'Invalid input. Please try again.\nYou have been logged out.\n'
-
-
-# Test 4: Add a product (0) that's out of bounds [1,5]
-def test_add_product_out_of_bounds_lower(mocker, capsys):
-    login_info = {'username': 'Maximus', 'wallet': 1000.0}
-    mocker.patch('assignment_1.online_shopping_cart.product.product_data.get_products', return_value=mock_global_products())
-    mocker.patch("assignment_1.online_shopping_cart.user.user_login.UserInterface.get_user_input", side_effect=['0', 'l', 'y'])
-    mocker.patch('builtins.exit', side_effect=SystemExit)
-
-    # NOTE: Global variable 'global_products' is set at module import of this test file.
-    #       The import below is to update this variable to the patch set within this test.
-    from assignment_1.online_shopping_cart.checkout import checkout_process
-    checkout_process.global_cart = ShoppingCart()
-    with pytest.raises(SystemExit):
-        checkout_process.checkout_and_payment(login_info)
-
-    assert capsys.readouterr().out == 'Invalid input. Please try again.\nYou have been logged out.\n'
+    assert capsys.readouterr().out == expected_output
 
 
 # Test 5: Add a product to the shopping cart, check out and see if its inventory is reduced
