@@ -103,15 +103,24 @@ def test_add_product_boundaries(user_input, expected_output, mocker, capsys):
 
 
 # Test 5: Add a product to the shopping cart, checkout and see if its inventory is reduced
-def test_checkout_reduce_product(mocker, capsys, temp_json):
+def test_checkout_reduce_product(mocker, temp_json):
     mocker.patch("assignment_1.online_shopping_cart.user.user_login.UserInterface.get_user_input", side_effect=['4', 'c', 'y', 'l', 'y'])
-    setup = setup_reimport_initialize(mocker, mock_global_products())
+    setup = setup_reimport_initialize(mocker, mock_global_products(), temp_json)
     assert setup.global_products[3].units == 0
 
 
-def test_checkout_and_payment6():
-    # NOTE: Rename function to something appropriate
-    pass
+# Test 6: Print out all the available products for purchase
+def test_checkout_and_payment6(mocker, capsys):
+    mocker.patch("assignment_1.online_shopping_cart.user.user_login.UserInterface.get_user_input",
+                 side_effect=['d', 'l', 'y'])
+    setup_reimport_initialize(mocker, mock_global_products())
+    assert capsys.readouterr().out ==  ('\nAvailable products for purchase:\n'
+                                        '1. Apple - $2.0 - Units: 9\n'
+                                        '2. Banana - $1.0 - Units: 15\n'
+                                        '3. Orange - $1.5 - Units: 8\n'
+                                        '4. Grapes - $3.0 - Units: 0\n'
+                                        '5. Strawberry - $4.0 - Units: 11\n'
+                                        'You have been logged out.\n')
 
 
 def test_checkout_and_payment7():
