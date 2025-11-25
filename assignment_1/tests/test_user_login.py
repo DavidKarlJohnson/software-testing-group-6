@@ -104,11 +104,26 @@ def test_register_user_invalid_pw(user_input, expected_output, mocker, temp_json
     assert capsys.readouterr().out == expected_output
 
 
-def test_user_login9():
-    # NOTE: Rename function to something appropriate
-    pass
+# Test 9: User quits the program before entering username
+def test_quit_login_username(mocker):
+    terminal_prompt = mocker.patch("assignment_1.online_shopping_cart.user.user_login.UserInterface.get_user_input", side_effect=['q'])
+    mocker.patch('builtins.exit', side_effect=SystemExit)
+
+    with pytest.raises(SystemExit):
+        login()
+
+    assert terminal_prompt.call_args_list[0].kwargs['prompt'].startswith("Enter your username")
+    assert terminal_prompt.call_count == 1
 
 
-def test_user_login10():
-    # NOTE: Rename function to something appropriate
-    pass
+# Test 10: User quits the program before entering password
+def test_quit_login_password(mocker):
+    terminal_prompt = mocker.patch("assignment_1.online_shopping_cart.user.user_login.UserInterface.get_user_input", side_effect=['Maximus', 'q'])
+    mocker.patch('builtins.exit', side_effect=SystemExit)
+
+    with pytest.raises(SystemExit):
+        login()
+
+    assert terminal_prompt.call_args_list[0].kwargs['prompt'].startswith("Enter your username")
+    assert terminal_prompt.call_args_list[1].kwargs['prompt'].startswith("Enter your password")
+    assert terminal_prompt.call_count == 2
