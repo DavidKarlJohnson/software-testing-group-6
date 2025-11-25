@@ -1,5 +1,5 @@
 from assignment_1.online_shopping_cart.checkout.shopping_cart import ShoppingCart
-from assignment_1.online_shopping_cart.product.product_data import get_products
+from assignment_1.online_shopping_cart.product import product_data
 from assignment_1.online_shopping_cart.user.user_data import UserDataManager
 from assignment_1.online_shopping_cart.user.user_interface import UserInterface
 from assignment_1.online_shopping_cart.product.product import Product
@@ -11,7 +11,7 @@ from assignment_1.online_shopping_cart.user.user import User
 ############################
 
 
-global_products: list[Product] = get_products()  # Load products from CSV
+global_products: list[Product] = product_data.get_products()
 global_cart: ShoppingCart = ShoppingCart()
 
 
@@ -95,6 +95,8 @@ def checkout_and_payment(login_info) -> None:
     Main function for the shopping and checkout process
     """
     global global_products, global_cart
+
+    global_products = product_data.get_products()
 
     user: User = User(
         name=login_info['username'],
