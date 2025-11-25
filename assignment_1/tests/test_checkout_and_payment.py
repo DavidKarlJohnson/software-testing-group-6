@@ -123,9 +123,13 @@ def test_checkout_and_payment6(mocker, capsys):
                                         'You have been logged out.\n')
 
 
-def test_checkout_and_payment7():
-    # NOTE: Rename function to something appropriate
-    pass
+# Test 7: User navigates to checkout with an empty cart
+def test_checkout_and_payment7(mocker, capsys):
+    mocker.patch("assignment_1.online_shopping_cart.user.user_login.UserInterface.get_user_input",
+                 side_effect=['c', 'l', 'y'])
+    setup_reimport_initialize(mocker, mock_global_products())
+    assert capsys.readouterr().out == ('\nItems in the cart:'
+                                       '\nYou have been logged out.\n')
 
 
 def test_checkout_and_payment8():
