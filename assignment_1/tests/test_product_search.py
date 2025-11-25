@@ -1,5 +1,5 @@
 import pytest
-from online_shopping_cart.product.product_search import display_csv_as_table, display_filtered_table
+from assignment_1.online_shopping_cart.product.product_search import display_csv_as_table, display_filtered_table
 
 # ----- TASK 3.2 -----
 # Write 10 test cases for the function 'display_csv_as_table' located in  /online_shopping_cart/product/product_search.py
@@ -14,7 +14,7 @@ def test_display_csv_as_table_default_file(mocker, capsys):
         ['Banana', '1', '15'],
         ['Bread', '1.5', '8']
     ]
-    mocker.patch('online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
+    mocker.patch('assignment_1.online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
     
     display_csv_as_table()
     captured = capsys.readouterr()
@@ -34,7 +34,7 @@ def test_display_csv_as_table_with_missing_columns(mocker, capsys):
         ['Biscuit'],                  # Missing 'Price' and 'Units'
         ['Donut', '1.5', '8']       # Complete row (normal)
     ]
-    mocker.patch('online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
+    mocker.patch('assignment_1.online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
     
     display_csv_as_table()
     captured = capsys.readouterr()
@@ -56,7 +56,7 @@ def test_display_csv_as_table_with_empty_strings(mocker, capsys):
         ['Flour', '1', ''],       # Empty units
         ['Bread', '1.5', '8']     # Normal row for comparison
     ]
-    mocker.patch('online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
+    mocker.patch('assignment_1.online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
     
     display_csv_as_table()
     captured = capsys.readouterr()
@@ -76,7 +76,7 @@ def test_display_csv_as_table_without_header(mocker, capsys):
         ['Lotion', '200', '10'],
         ['Shampoo', '150', '5']
     ]
-    mocker.patch('online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
+    mocker.patch('assignment_1.online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
     
     display_csv_as_table()
     captured = capsys.readouterr()
@@ -96,7 +96,7 @@ def test_display_csv_as_table_with_extra_columns(mocker, capsys):
         ['Chips', '1', '15', 'ExtraData'],        # 4 elements instead of 3
         ['Salsa', '1.5', '8']                      # Normal 3 elements
     ]
-    mocker.patch('online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
+    mocker.patch('assignment_1.online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
     
     display_csv_as_table()
     captured = capsys.readouterr()
@@ -119,7 +119,7 @@ def test_display_csv_as_table_with_special_characters(mocker, capsys):
         ['Product/Service', '25.00', '7'],  # Slash
         ['Test&Test', '5.5', '20']          # Ampersand
     ]
-    mocker.patch('online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
+    mocker.patch('assignment_1.online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
     
     display_csv_as_table()
     captured = capsys.readouterr()
@@ -147,7 +147,7 @@ def test_display_csv_as_table_row_count(mocker, capsys):
         ['Product10', '10', '100'],
         ['Product11', '11', '110']
     ]
-    mocker.patch('online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
+    mocker.patch('assignment_1.online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
     
     display_csv_as_table()
     captured = capsys.readouterr()
@@ -166,7 +166,7 @@ def test_display_csv_as_table_preserves_order(mocker, capsys):
         ['Banana', '1', '15'],
         ['Orange', '1.5', '8']
     ]
-    mocker.patch('online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
+    mocker.patch('assignment_1.online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
     
     display_csv_as_table()
     captured = capsys.readouterr()
@@ -184,7 +184,7 @@ def test_display_csv_as_table_with_empty_csv(mocker, capsys):
     """Test display_csv_as_table with only header (no data rows)"""
     mock_header = ['Product', 'Price', 'Units']
     mock_data = []
-    mocker.patch('online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
+    mocker.patch('assignment_1.online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
     
     display_csv_as_table()
     captured = capsys.readouterr()
@@ -197,7 +197,7 @@ def test_display_csv_as_table_with_empty_csv(mocker, capsys):
 
 def test_display_csv_as_table_file_not_found(mocker):
     """Test that FileNotFoundError is raised for non-existent file"""
-    mocker.patch('online_shopping_cart.product.product_search.get_csv_data', side_effect=FileNotFoundError)
+    mocker.patch('assignment_1.online_shopping_cart.product.product_search.get_csv_data', side_effect=FileNotFoundError)
     
     with pytest.raises(FileNotFoundError):
         display_csv_as_table(csv_filename="nonexistent_file.csv")
@@ -216,7 +216,7 @@ def test_display_filtered_table_with_none_search_target(mocker, capsys):
     """Test that display_filtered_table calls display_csv_as_table when search_target is None"""
     mock_header = ['Product', 'Price', 'Units']
     mock_data = [['Hat', '20', '10'], ['Coat', '100', '15']]
-    mocker.patch('online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
+    mocker.patch('assignment_1.online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
     
     display_filtered_table(search_target=None)
     captured = capsys.readouterr()
@@ -234,7 +234,7 @@ def test_display_filtered_table_exact_match(mocker, capsys):
         ['Salchicha', '1', '15'],
         ['Zuchini', '1.5', '8']
     ]
-    mocker.patch('online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
+    mocker.patch('assignment_1.online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
     
     display_filtered_table(search_target='HotDog')
     captured = capsys.readouterr()
@@ -253,7 +253,7 @@ def test_display_filtered_table_partial_match(mocker, capsys):
         ['Melon', '5', '3'],
         ['Tape', '1', '15']
     ]
-    mocker.patch('online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
+    mocker.patch('assignment_1.online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
     
     # Search for 'Watermelon' which contains 'melon' as substring
     display_filtered_table(search_target='Watermelon')
@@ -272,7 +272,7 @@ def test_display_filtered_table_case_insensitive(mocker, capsys):
         ['PASTA', '2', '10'],
         ['Tomato', '1', '15']
     ]
-    mocker.patch('online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
+    mocker.patch('assignment_1.online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
     
     # Search with lowercase
     display_filtered_table(search_target='pasta')
@@ -289,7 +289,7 @@ def test_display_filtered_table_no_matches(mocker, capsys):
         ['Cheesecake', '2', '10'],
         ['Cheese', '1', '15']
     ]
-    mocker.patch('online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
+    mocker.patch('assignment_1.online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
     
     display_filtered_table(search_target='Mango')
     captured = capsys.readouterr()
@@ -314,7 +314,7 @@ def test_display_filtered_table_multiple_scenarios(mocker, capsys, search_target
                                                    expected_products, not_expected_products):
     """Test filtering with multiple search scenarios - search_target contains product names"""
     mock_header = ['Product', 'Price', 'Units']
-    mocker.patch('online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
+    mocker.patch('assignment_1.online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
     
     display_filtered_table(search_target=search_target)
     captured = capsys.readouterr()
@@ -332,7 +332,7 @@ def test_display_filtered_table_header_always_displayed(mocker, capsys):
     """Test that header is always displayed even with no matches"""
     mock_header = ['Product', 'Price', 'Units']
     mock_data = [['Apple', '2', '10']]
-    mocker.patch('online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
+    mocker.patch('assignment_1.online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
     
     display_filtered_table(search_target='NonExistent')
     captured = capsys.readouterr()
@@ -349,7 +349,7 @@ def test_display_filtered_table_all_products_match(mocker, capsys):
         ['le', '5', '2'],
         ['ppl', '2', '10']
     ]
-    mocker.patch('online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
+    mocker.patch('assignment_1.online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
     
     # Search for 'Apple' which contains 'App', 'le', and 'ppl'
     display_filtered_table(search_target='Apple')
@@ -369,7 +369,7 @@ def test_display_filtered_table_single_character_search(mocker, capsys):
         ['B', '3', '5'],
         ['C', '1', '15']
     ]
-    mocker.patch('online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
+    mocker.patch('assignment_1.online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
     
     # Search for 'ABC' which contains 'A', 'B', and 'C'
     display_filtered_table(search_target='ABC')
@@ -385,7 +385,7 @@ def test_display_filtered_table_newline_format(mocker, capsys):
     """Test that output starts with newline"""
     mock_header = ['Product', 'Price', 'Units']
     mock_data = [['Apple', '2', '10']]
-    mocker.patch('online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
+    mocker.patch('assignment_1.online_shopping_cart.product.product_search.get_csv_data', return_value=(mock_header, mock_data))
     
     display_filtered_table(search_target='Apple')
     captured = capsys.readouterr()
