@@ -8,7 +8,7 @@ from tasks_3_and_4.air_traffic_control import air_traffic_control
 
 
 # Test 1: Make the predicate in the if-condition of the
-#         function 'air_traffic_control' TRUE
+# function 'air_traffic_control' TRUE
 def test_predicate_true():
     assert air_traffic_control(
         True,
@@ -19,3 +19,18 @@ def test_predicate_true():
        1001,
        4,
        False) == 'Landing Allowed'
+
+
+# Test 2: Make the predicate in the if-condition of the
+# function 'air_traffic_control' FALSE, by making the derived
+# condition 'runway_available' FALSE
+def test_predicate_false():
+    assert air_traffic_control(
+        False,
+       False,
+       100,
+       False,
+       30,
+       1001,
+       4,
+       False) == 'Landing Denied'
