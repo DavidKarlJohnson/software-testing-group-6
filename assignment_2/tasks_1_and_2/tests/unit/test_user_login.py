@@ -57,7 +57,7 @@ def test_register_save_new_user(mocker, capsys, temp_json):
     mocker.patch("tasks_1_and_2.online_shopping_cart.user.user_login.UserInterface.get_user_input", side_effect=[username, 'password123', 'y', password])
     mocker.patch( "tasks_1_and_2.online_shopping_cart.user.user_data.UserDataManager.USER_FILE_PATHNAME", temp_json)
     login()
-    assert json_to_list(temp_json)[-1] == {'username': username, 'password': password, 'wallet': 0.0}
+    assert json_to_list(temp_json)[-1] == {'username': username, 'password': password, 'wallet': 0.0, 'credit_cards': []}
 
 
 # Test 3: The user declines the prompt to register a new user

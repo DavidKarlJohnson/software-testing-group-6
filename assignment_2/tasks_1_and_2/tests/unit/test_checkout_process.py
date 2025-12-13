@@ -143,7 +143,7 @@ def test_check_cart_checkout_yes(mocker, capsys):
     user = User(name="Bob", wallet=10.0)
     cart = ShoppingCart()
     cart.add_item(Product(name="Apple", price=2.0, units=1))
-    mocker.patch("assignment_1.online_shopping_cart.user.user_interface.UserInterface.get_user_input", side_effect=['y'])
+    mocker.patch("tasks_1_and_2.online_shopping_cart.user.user_interface.UserInterface.get_user_input", side_effect=['y'])
     result = check_cart(user, cart)
     captured = capsys.readouterr()
     assert result is None
@@ -156,7 +156,7 @@ def test_check_cart_checkout_no_remove_no_returns_false(mocker):
     user = User(name="Carol", wallet=10.0)
     cart = ShoppingCart()
     cart.add_item(Product(name="Banana", price=1.0, units=1))
-    mocker.patch("assignment_1.online_shopping_cart.user.user_interface.UserInterface.get_user_input", side_effect=['n', 'n'])
+    mocker.patch("tasks_1_and_2.online_shopping_cart.user.user_interface.UserInterface.get_user_input", side_effect=['n', 'n'])
     result = check_cart(user, cart)
     assert result is False
     assert not cart.is_empty()
@@ -166,20 +166,20 @@ def test_check_cart_remove_display_then_exit(mocker):
     user = User(name="Dave", wallet=20.0)
     cart = ShoppingCart()
     cart.add_item(Product(name="Bread", price=2.5, units=1))
-    mocker.patch("assignment_1.online_shopping_cart.user.user_interface.UserInterface.get_user_input", side_effect=['n', 'y', 'c', 'n', 'n'])
+    mocker.patch("tasks_1_and_2.online_shopping_cart.user.user_interface.UserInterface.get_user_input", side_effect=['n', 'y', 'c', 'n', 'n'])
     result = check_cart(user, cart)
     assert result is False
     assert not cart.is_empty()
 
 
 def test_check_cart_remove_valid_index_updates_cart_and_inventory(mocker):
-    from assignment_1.online_shopping_cart.checkout import checkout_process
+    from tasks_1_and_2.online_shopping_cart.checkout import checkout_process
     user = User(name="Eve", wallet=50.0)
     cart = ShoppingCart()
     cart.add_item(Product(name="Milk", price=3.0, units=1))
     cart.add_item(Product(name="Milk", price=3.0, units=1))
     checkout_process.global_products = [Product(name="Milk", price=3.0, units=10)]
-    mocker.patch("assignment_1.online_shopping_cart.user.user_interface.UserInterface.get_user_input", side_effect=['n', 'y', '1', 'n', 'n'])
+    mocker.patch("tasks_1_and_2.online_shopping_cart.user.user_interface.UserInterface.get_user_input", side_effect=['n', 'y', '1', 'n', 'n'])
     result = check_cart(user, cart)
     assert result is False
     assert cart.retrieve_items()[0].units == 1
@@ -190,7 +190,7 @@ def test_check_cart_remove_invalid_index_prints_error(mocker, capsys):
     user = User(name="Frank", wallet=50.0)
     cart = ShoppingCart()
     cart.add_item(Product(name="Eggs", price=5.0, units=1))
-    mocker.patch("assignment_1.online_shopping_cart.user.user_interface.UserInterface.get_user_input", side_effect=['n', 'y', '99', 'n', 'n'])
+    mocker.patch("tasks_1_and_2.online_shopping_cart.user.user_interface.UserInterface.get_user_input", side_effect=['n', 'y', '99', 'n', 'n'])
     check_cart(user, cart)
     captured = capsys.readouterr()
     assert 'Invalid input. Please try again.\n' in captured.out
@@ -201,7 +201,7 @@ def test_check_cart_remove_non_digit_prints_error(mocker, capsys):
     user = User(name="Gina", wallet=50.0)
     cart = ShoppingCart()
     cart.add_item(Product(name="Cheese", price=7.5, units=1))
-    mocker.patch("assignment_1.online_shopping_cart.user.user_interface.UserInterface.get_user_input", side_effect=['n', 'y', 'abc', 'n', 'n'])
+    mocker.patch("tasks_1_and_2.online_shopping_cart.user.user_interface.UserInterface.get_user_input", side_effect=['n', 'y', 'abc', 'n', 'n'])
     check_cart(user, cart)
     captured = capsys.readouterr()
     assert 'Invalid input. Please try again.\n' in captured.out
@@ -214,7 +214,7 @@ def test_check_cart_remove_until_empty(mocker):
     p = Product(name="Juice", price=4.0, units=1)
     cart.add_item(p)
     cart.add_item(p)
-    mocker.patch("assignment_1.online_shopping_cart.user.user_interface.UserInterface.get_user_input", side_effect=['n', 'y', '1', 'n', 'y', '1', 'n', 'n'])
+    mocker.patch("tasks_1_and_2.online_shopping_cart.user.user_interface.UserInterface.get_user_input", side_effect=['n', 'y', '1', 'n', 'y', '1', 'n', 'n'])
     result = check_cart(user, cart)
     assert result is False
     assert cart.is_empty()
@@ -224,7 +224,7 @@ def test_check_cart_checkout_uppercase_yes(mocker):
     user = User(name="Ivy", wallet=10.0)
     cart = ShoppingCart()
     cart.add_item(Product(name="Snack", price=3.0, units=1))
-    mocker.patch("assignment_1.online_shopping_cart.user.user_interface.UserInterface.get_user_input", side_effect=['Y'])
+    mocker.patch("tasks_1_and_2.online_shopping_cart.user.user_interface.UserInterface.get_user_input", side_effect=['Y'])
     result = check_cart(user, cart)
     assert result is None
     assert cart.is_empty()
@@ -234,7 +234,7 @@ def test_check_cart_checkout_uppercase_yes(mocker):
 def test_check_cart_empty_even_if_user_inputs(mocker):
     user = User(name="Jack", wallet=10.0)
     cart = ShoppingCart()
-    mocker.patch("assignment_1.online_shopping_cart.user.user_interface.UserInterface.get_user_input", side_effect=['y'])
+    mocker.patch("tasks_1_and_2.online_shopping_cart.user.user_interface.UserInterface.get_user_input", side_effect=['y'])
     result = check_cart(user, cart)
     assert result is False
     assert cart.is_empty()

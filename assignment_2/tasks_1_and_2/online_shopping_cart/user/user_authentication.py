@@ -5,6 +5,7 @@
 #from rich.console import Console
 
 from ..user.user_data import UserDataManager
+from ..user.user import CreditCard
 
 
 class PasswordValidator:
@@ -52,9 +53,14 @@ class UserAuthenticator:
             if is_user_registered:
                 if entry['password'].lower() == password.lower():
                     print('Successfully logged in.')
+                    # Load credit cards if they exist
+                    credit_cards = []
+                    if 'credit_cards' in entry and entry['credit_cards']:
+                        credit_cards = [CreditCard.from_dict(card_data) for card_data in entry['credit_cards']]
                     return {
                         'username': entry['username'],
-                        'wallet': entry['wallet']
+                        'wallet': entry['wallet'],
+                        'credit_cards': credit_cards
                     }
                 break
 
@@ -65,6 +71,12 @@ class UserAuthenticator:
         return None
 
     @staticmethod
-    def register(username, password, data) -> None:
-        data.append({'username': username, 'password': password, 'wallet': 0.0})
+    def register(username, password, data, credit_cards=None) -> None:
+        new_user = {
+            'username': username, 
+            'password': password, 
+            'wallet': 0.0,
+            'credit_cards': credit_cards if credit_cards else []
+        }
+        data.append(new_user)
         UserDataManager.save_users(data)
