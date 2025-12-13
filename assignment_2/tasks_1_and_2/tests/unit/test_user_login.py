@@ -44,7 +44,7 @@ def json_to_list(file):
 
 # Test 1: Log in an existing user
 def test_successful_login(mocker, temp_json):
-    mocker.patch( "tasks_1_and_2.online_shopping_cart.user.user_login.UserInterface.get_user_input", side_effect=['Maximus', 'StrongPwd!23'])
+    mocker.patch( "tasks_1_and_2.online_shopping_cart.user.user_login.UserInterface.get_user_input", side_effect=['Maximus', 'StrongPwd!23', '1'])
     mocker.patch( "tasks_1_and_2.online_shopping_cart.user.user_data.UserDataManager.USER_FILE_PATHNAME", temp_json)
     assert login() is not None
 

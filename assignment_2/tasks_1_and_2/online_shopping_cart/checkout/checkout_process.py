@@ -138,7 +138,7 @@ def checkout_and_payment(login_info) -> None:
     user: User = User(
         name=login_info['username'],
         wallet=login_info['wallet'],
-        credit_cards=login_info.get('credit_cards', [])
+        credit_cards=[CreditCard.from_dict(c) for c in login_info.get('credit_cards', [])]
     )
 
     # Get user input for either selecting a product by its number, checking their cart or logging out
