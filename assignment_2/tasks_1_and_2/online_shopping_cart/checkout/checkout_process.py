@@ -4,7 +4,7 @@ from ..user.user_data import UserDataManager
 from ..user.user_interface import UserInterface
 from ..product.product import Product
 from ..user.user_logout import logout
-from ..user.user import User
+from ..user.user import User, CreditCard
 
 ############################
 # CHECKOUT PROCESS GLOBALS #
@@ -36,6 +36,38 @@ def checkout(user, cart) -> None:
         return
 
     total_price: float = cart.get_total_price()
+    
+    # Ask user for payment method
+    payment_method = UserInterface.get_user_input(
+        prompt='\nChoose payment method (wallet/card): '
+    ).lower()
+    
+    if payment_method.startswith('c'):
+        # Card payment
+        if not user.credit_cards:
+            print('You have no credit cards registered. Using wallet instead.')
+            payment_method = 'wallet'
+        else:
+            # Display available cards
+            print('\nYour credit cards:')
+            for i, card in enumerate(user.credit_cards):
+                print(f'{i + 1}. {card.name_on_card} - **** **** **** {card.card_number[-4:]} (Exp: {card.expiry_date})')
+            
+            card_choice = UserInterface.get_user_input(
+                prompt='\nSelect card number: '
+            )
+            
+            if card_choice.isdigit() and 1 <= int(card_choice) <= len(user.credit_cards):
+                selected_card = user.credit_cards[int(card_choice) - 1]
+                print(f'Paying ${total_price:.2f} with card ending in {selected_card.card_number[-4:]}')
+                cart.clear_items()
+                print(f'Thank you for your purchase, {user.name}!')
+                return
+            else:
+                print('Invalid card selection. Payment cancelled.')
+                return
+    
+    # Wallet payment (default)
     if total_price > user.wallet:
         print(f"You don't have enough money to complete the purchase. Please try again!")
         return

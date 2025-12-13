@@ -107,7 +107,7 @@ def test_add_product_boundaries(user_input, expected_output, mocker, capsys):
 
 # Test 5: Add a product to the shopping cart, checkout and see if its inventory is reduced
 def test_checkout_reduce_product(mocker, temp_json):
-    mocker.patch("tasks_1_and_2.online_shopping_cart.user.user_login.UserInterface.get_user_input", side_effect=['4', 'c', 'y', 'l', 'y'])
+    mocker.patch("tasks_1_and_2.online_shopping_cart.user.user_login.UserInterface.get_user_input", side_effect=['4', 'c', 'y', 'wallet', 'l', 'y'])
     setup = setup_reimport_initialize(mocker, mock_global_products(), temp_json)
     assert setup.global_products[3].units == 0
 
@@ -168,7 +168,7 @@ def test_remove_invalid_product_from_cart(mocker, capsys):
 
 # Test 11: Checkout and see if cart is cleared and user's wallet updated in users.json
 def test_checkout_clear_cart(mocker, temp_json):
-    mocker.patch("tasks_1_and_2.online_shopping_cart.user.user_login.UserInterface.get_user_input", side_effect=['1', 'c', 'y', 'l', 'y'])
+    mocker.patch("tasks_1_and_2.online_shopping_cart.user.user_login.UserInterface.get_user_input", side_effect=['1', 'c', 'y', 'wallet', 'l', 'y'])
     setup = setup_reimport_initialize(mocker, mock_global_products(), temp_json)
 
     assert setup.global_cart.is_empty()
@@ -193,7 +193,7 @@ def test_logout_non_empty_cart(mocker, capsys):
 
 # Test 13: Check to see it checking out a product changes the 'display products' message
 def test_display_products_after_checkout(mocker, capsys, temp_json):
-    mocker.patch("tasks_1_and_2.online_shopping_cart.user.user_login.UserInterface.get_user_input", side_effect=['d', '1', 'c', 'y', 'd', 'l', 'y'])
+    mocker.patch("tasks_1_and_2.online_shopping_cart.user.user_login.UserInterface.get_user_input", side_effect=['d', '1', 'c', 'y', 'wallet', 'd', 'l', 'y'])
     setup_reimport_initialize(mocker, [Product(name='Kex', price=2.0, units=1), Product(name='Banana', price=1.0, units=15)], temp_json)
     assert capsys.readouterr().out == ('\n'
                                         'Available products for purchase:\n'
