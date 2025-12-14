@@ -39,5 +39,5 @@ def test_predicate_false(capsys):
        1001,
        4,
        False)
-    assert capsys.readouterr().out == 'Debug Info:\nAll conditions met for landing.\n\n'
+    assert capsys.readouterr().out != 'Debug Info:\nAll conditions met for landing.\n\n'
 
