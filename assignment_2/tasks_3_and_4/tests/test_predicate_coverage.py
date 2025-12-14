@@ -11,7 +11,7 @@ from tasks_3_and_4.air_traffic_control import air_traffic_control
 
 # Test 1: Make the predicate in the if-condition of the
 # function 'air_traffic_control' TRUE
-def test_predicate_true():
+def test_predicate_true(capsys):
     assert air_traffic_control(
         True,
        True,
@@ -21,18 +21,23 @@ def test_predicate_true():
        1001,
        4,
        False) == 'Landing Allowed'
+    assert capsys.readouterr().out == 'Debug Info:\nAll conditions met for landing.\n\n'
+
+
 
 
 # Test 2: Make the predicate in the if-condition of the
-# function 'air_traffic_control' FALSE, by making the derived
-# condition 'runway_available' FALSE
-def test_predicate_false():
+# function 'air_traffic_control' FALSE, by changing
+# 'emergency' to True.
+def test_predicate_false(capsys):
     assert air_traffic_control(
-        False,
-       False,
+        True,
+       True,
        100,
-       False,
+       True,
        30,
        1001,
        4,
-       False) == 'Landing Denied'
+       False)
+    assert capsys.readouterr().out == 'Debug Info:\nAll conditions met for landing.\n\n'
+
