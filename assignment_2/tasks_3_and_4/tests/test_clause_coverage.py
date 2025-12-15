@@ -26,6 +26,10 @@ statement pass. Subsequent tests are meant to ensure that the if-statement doesn
 argument values and testing for the absence of the printout "All conditions met for landing.", which
 is exclusive to the if-statement. "Flipping" all the 7 arguments will ensure that they've all been either
 True and False at some point, ensuring clause coverage.
+
+This test suite does not subsume predicate coverage if take the whole function (air_traffic_control) into account,
+since it only covers the if-statement. If we only take the if-statement into account, we achieve predicate coverage
+automatically through the clause coverage of this test suite.
 """
 
 
