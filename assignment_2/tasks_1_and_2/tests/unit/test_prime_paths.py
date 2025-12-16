@@ -162,20 +162,25 @@ def test_prime_path_6_card_payment_invalid_index_high(sample_user_with_cards, ca
 
 
 
-def test_prime_path_7_card_payment_non_numeric_input(sample_user_with_cards, cart_with_items, capsys):
+def test_prime_path_7_check_cart_invalid_removal_then_checkout(sample_user_with_cards, capsys):
     """
-    Prime Path 7: Card payment with non-numeric card selection
-    User enters 'abc' instead of a number
-    Sidetrips: None, Detours: None
+    Prime Path 7: check_cart with invalid removal input, then successful checkout
+    User attempts to remove item with invalid input, loops back, then checkouts successfully
+    Sidetrips: Yes (calls checkout), Detours: Yes (while loop iteration)
     """
+    cart = ShoppingCart()
+    cart.add_item(Product(name='Apple', price=2.0, units=1))
+    cart.add_item(Product(name='Banana', price=1.0, units=1))
+    
     with patch('tasks_1_and_2.online_shopping_cart.user.user_interface.UserInterface.get_user_input') as mock_input:
-        mock_input.side_effect = ['card', 'abc']
+        mock_input.side_effect = ['no', 'yes', 'invalid', 'yes', 'wallet']
         
-        checkout(sample_user_with_cards, cart_with_items)
+        check_cart(sample_user_with_cards, cart)
         
-        assert not cart_with_items.is_empty()
+        assert cart.is_empty()  # Cart cleared after successful checkout
         captured = capsys.readouterr()
-        assert 'Invalid card selection' in captured.out
+        assert 'Invalid input' in captured.out  # From invalid removal input
+        assert 'Thank you for your purchase' in captured.out  # From successful checkout
 
 
 
