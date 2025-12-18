@@ -10,39 +10,143 @@ from tasks_3_and_4.air_traffic_control import air_traffic_control
 
 # TEST CREATOR:  David Johnson
 
-# NOTE: 7 clauses from 'air_traffic_control':
-# A = runway_available  ==  runway_clear OR alternate_runway_available
-# B = safe_speed  ==  plane_speed < 150
-# C = emergency
-# D = acceptable_traffic   ==  airport_traffic <= 5
-# E = traffic_override  ==  priority_status AND airport_traffic <= 8
-# F = safe_weather  ==  wind_speed <= 40 AND visibility >= 1000
-# G = weather_override  ==  priority_status AND NOT safe_weather
+"""
+# NOTE: 7 clauses (atomic) from 'air_traffic_control':
+1: runway_clear
+2: alternate_runway_available
+3: plane_speed
+4: emergency
+5: wind_speed
+6: visibility
+7: airport_traffic
+
+The 7 clauses were selected since they all exists within the if-statement of the 'air_traffic_control'
+function (mostly as derived conditions). First, I create an initial test (test_clause1), which will make the if-
+statement pass. Subsequent tests are meant to ensure that the if-statement doesn't pass by "flipping" the
+argument values and testing for the absence of the printout "All conditions met for landing.", which
+is exclusive to the if-statement. "Flipping" all the 7 arguments will ensure that they've all been either
+True and False at some point, ensuring clause coverage.
+
+This test suite does not subsume predicate coverage if take the whole function (air_traffic_control) into account,
+since it only covers the if-statement. If we only take the if-statement into account, we achieve predicate coverage
+automatically through the clause coverage of this test suite.
+"""
 
 
-# A = B = C = D = E = F = True
-# G = False
-def test_clause1():
+# Make the if-statement True
+def test_clause1(capsys):
     assert air_traffic_control(
         True,
-        True,
-        100,
-        True,
-        30,
-        1100,
-        4,
-        True) == 'Landing Allowed'
+        False,
+        1,
+        False,
+        1,
+        1000,
+        1,
+        True)
+    assert capsys.readouterr().out == 'Debug Info:\nAll conditions met for landing.\n\n'
 
 
-# A = B = C = D = E = F = False
-# G = True
-def test_clause2():
+# Set RUNWAY_CLEAR to False
+# Will make RUNWAY_AVAILABLE False, and if-statement False
+def test_clause2(capsys):
+    air_traffic_control(
+    False,
+    False,
+    1,
+    False,
+    1,
+    1000,
+    1,
+    True)
+    assert capsys.readouterr().out != 'Debug Info:\nAll conditions met for landing.\n\n'
+
+
+# Set ALTERNATE_RUNWAY_AVAILABLE to True, and RUNWAY_CLEAR to FALSE
+# Will make RUNWAY_AVAILABLE True, and if-statement True
+def test_clause3(capsys):
     assert air_traffic_control(
         False,
         True,
-        200,
+        1,
         False,
-        50,
-        1100,
-        10,
-        True) == 'Landing Allowed'
+        1,
+        1000,
+        1,
+        True)
+    assert capsys.readouterr().out == 'Debug Info:\nAll conditions met for landing.\n\n'
+
+
+# Set PLANE_SPEED to 1000
+# Will make SAFE_SPEED False, and if-statement False
+def test_clause4(capsys):
+    assert air_traffic_control(
+        True,
+        False,
+        1000,
+        False,
+        1,
+        1000,
+        1,
+        True)
+    assert capsys.readouterr().out != 'Debug Info:\nAll conditions met for landing.\n\n'
+
+
+# Set EMERGENCY to True
+# Will make if-statement False
+def test_clause5(capsys):
+    assert air_traffic_control(
+        True,
+        False,
+        1,
+        True,
+        1,
+        1000,
+        1,
+        True)
+    assert capsys.readouterr().out != 'Debug Info:\nAll conditions met for landing.\n\n'
+
+
+# Set WIND_SPEED to 1000
+# Will make SAFE_WEATHER False, and if-statement False
+def test_clause6(capsys):
+    assert air_traffic_control(
+        True,
+        False,
+        1,
+        False,
+        1000,
+        1000,
+        1,
+        True)
+    assert capsys.readouterr().out != 'Debug Info:\nAll conditions met for landing.\n\n'
+
+
+# Set VISIBILITY to 1
+# Will make SAFE_WEATHER False, and if-statement False
+def test_clause7(capsys):
+    assert air_traffic_control(
+        True,
+        False,
+        1,
+        False,
+        1,
+        1,
+        1,
+        True)
+    assert capsys.readouterr().out != 'Debug Info:\nAll conditions met for landing.\n\n'
+
+
+# Set AIRPORT_TRAFFIC to 1000
+# Will make ACCEPTABLE_TRAFFIC False, and if-statement False
+def test_clause8(capsys):
+    assert air_traffic_control(
+        True,
+        False,
+        1,
+        False,
+        1,
+        1000,
+        1000,
+        True)
+    assert capsys.readouterr().out != 'Debug Info:\nAll conditions met for landing.\n\n'
